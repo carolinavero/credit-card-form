@@ -12,7 +12,7 @@
                     <div class="col-6 card-chip">
                         <img src="../assets/chip.png" alt="chip">
                     </div>
-                    <div class="col-6 card-logo visa"></div>
+                    <div class="col-6 card-logo mastercard"></div>
                 </div>
 
                 <div class="row">
@@ -92,7 +92,7 @@
                     >
             </p>
 
-            <p class="col-6">
+            <p class="col-6 ml-2">
                 <label for="card-cvc">CVC / CVV2</label>
                 <input 
                     id="card-cvc" 
@@ -151,6 +151,9 @@ export default {
 
 <style scoped>
 
+.ml-2 {
+    margin-left: 1rem;
+}
 .card-flipped {
   transform: rotateY(180deg);
 }
