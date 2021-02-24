@@ -66,6 +66,7 @@
                 name="card-number" 
                 placeholder="Type the card number"
                 v-model.number="cardNumber"
+                :maxlength="maxCardNumber"
             >
         </p>
         
@@ -99,8 +100,9 @@
                     type="number" 
                     name="card-cvc"
                     placeholder="XXX" 
-                    v-model.number="cardCvc"
-                    maxlength="3"
+                    v-model="cardCvc"
+                    min="0"
+                    max="4"
                     @focus="flipped = true"
                     @blur="flipped  = false"
                 >
@@ -127,7 +129,9 @@ export default {
            expireDate: '00/00',
            cardName: 'CARDHOLDER NAME',
            cardCvc: 'XXX',
-           flipped: false
+           flipped: false,
+           maxCardNumber: 4,
+           maxCvc: 3
         }
     },
     methods: {
@@ -272,14 +276,6 @@ input[type=number] {
 }
 
 
-.card-block__content:hover .card {
-  transform: rotateY(180deg);
-}
-
-/* .card-turned {
-  transform: rotateY(180deg);
-} */
-
 /* .card-front {
     background: #ECE9E6;  
     background: -webkit-linear-gradient(to right, #FFFFFF, #ECE9E6);  
@@ -305,6 +301,7 @@ input[type=number] {
 .card-back {
   padding: 1rem;
   transform: rotateY(180deg);
+  position: absolute;
 }
 
 .bg-dark {
