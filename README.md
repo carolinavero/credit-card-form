@@ -1,5 +1,9 @@
 # card-payment
 
+
+![Preview](./src/assets/preview.png)
+
+
 ## Project setup
 ```
 npm install
