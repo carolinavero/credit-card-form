@@ -3,6 +3,8 @@
 
 ![Preview](./src/assets/preview.png)
 
+[Demo](https://credit-card-form-vuejs.netlify.app/)
+
 
 ## Project setup
 ```
