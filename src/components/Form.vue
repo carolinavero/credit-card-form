@@ -16,24 +16,24 @@
                 </div>
 
                 <div class="row">
-
                     <div class="col-12 card-number">
-                        {{ cardNumber }}
+                        {{ cardNumberDefault }}
                     </div>
                 </div>
                 <div class="row card-footer">
 
-                    <div class="col-12 card-name">
-                        {{ cardName | capitalize }}
+                    <div class="card-name">
+                        <div>
+                            <div>Cardholder's Name</div>
+                            {{ cardNameDefault | capitalize }}
+                        </div>
+                            
                     </div>
 
-                </div>
-
-                <div class="row">
-                     <div class="col-6">
+                    <div class="col-5">
                         <div class="card-date">
                             <div>Valid thru</div>
-                            {{ expireDate }}
+                            {{ expireDateDefault }}
                         </div>
                     </div>
                 </div>
@@ -42,10 +42,12 @@
             <div class="card-back">
                 <div class="bg-dark"></div>
                 <div class="text-small">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facere quibusdam, quae vitae eos odio ad assumenda voluptates sit, magni obcaecati aspernatur ipsam rerum facilis sint earum possimus magnam in atque!
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
+                    Facere quibusdam, quae vitae eos odio ad assumenda voluptates sit, 
+                    magni obcaecati aspernatur ipsam rerum facilis sint earum possimus magnam in atque!
                 </div>
                 <div class="card-cvc">
-                    CVC  {{ cardCvc }}
+                    CVC  {{ cardCvcDefault }}
                 </div>
             </div>
 
@@ -55,18 +57,27 @@
     <form 
         id="card"
         @submit="checkForm"
-        action="#"
+        action="/cards"
+        novalidate="true"
         method="post"
       >
+
+        <p v-if="errors.length">
+            <b>Please correct the following error(s):</b>
+            <ul>
+                <li v-for="(error, index) in errors" :key="index"> {{ error }} </li>
+            </ul>
+        </p>
+
         <p>
             <label for="card-number">Card Number</label>
             <input 
                 id="card-number" 
-                type="number" 
+                type="text" 
                 name="card-number" 
                 placeholder="Type the card number"
-                v-model.number="cardNumber"
-                :maxlength="maxCardNumber"
+                v-model="cardNumber"
+                maxlength="20"
             >
         </p>
         
@@ -86,10 +97,11 @@
                 <label for="expire-date">Expire Date</label>
                 <input 
                     id="expire-date" 
-                    type="number" 
+                    type="text" 
                     name="expire-date" 
-                    placeholder="MM / YY"
+                    placeholder="MM/YY"
                     v-model="expireDate"
+                    maxlength="5"
                     >
             </p>
 
@@ -100,9 +112,8 @@
                     type="number" 
                     name="card-cvc"
                     placeholder="XXX" 
-                    v-model="cardCvc"
-                    min="0"
-                    max="4"
+                    @input="updateValue"
+                    :value="cardCvc"
                     @focus="flipped = true"
                     @blur="flipped  = false"
                 >
@@ -111,8 +122,9 @@
         </div>
         
         <p>
-            <input type="submit" value="Save Card" class="btn-submit">
+            <input type="submit" value="Save Card" class="btn-submit" >
         </p>
+        
 
     </form>
 
@@ -125,22 +137,96 @@ export default {
     name: 'Form',
     data() {
         return {
-           cardNumber: 'XXXX XXXX XXXX XXXX',
-           expireDate: '00/00',
-           cardName: 'CARDHOLDER NAME',
-           cardCvc: 'XXX',
+           cardNumber: '',
+           cardNumberDefault: 'XXXX XXXX XXXX XXXX',
+           expireDate: '',
+           expireDateDefault: '01/22',
+           cardName: '',
+           cardNameDefault: 'John Doe',
+           cardCvc: '',
+           cardCvcDefault: '123',
            flipped: false,
-           maxCardNumber: 4,
-           maxCvc: 3
+           errors: [],
+        }
+    },
+    mounted() {
+        if(localStorage.cardName) this.cardName = localStorage.cardName;
+        if(localStorage.cardNumber) this.cardNumber = localStorage.cardNumber;
+    },
+    watch: {
+        cardNumber: {
+            immediate: false,
+            handler(value) {
+                if (value) {
+                    this.cardNumberDefault = value
+                    
+                } else {
+                    this.cardNumberDefault = 'XXXX XXXX XXXX XXXX';
+                }
+            }
+        },
+        cardName: {
+            immediate: false,
+            handler(value) {
+                if (value) {
+                    this.cardNameDefault = value
+                    
+                } else {
+                    this.cardNameDefault = 'John Doe';
+                }
+            }
+        },
+        expireDate: {
+            immediate: false,
+            handler(value) {
+                if (value) {
+                    this.expireDateDefault = value
+                    
+                } else {
+                    this.expireDateDefault = '01/21';
+                }
+            }
+        },
+        cardCvcDefault: {
+            immediate: false,
+            handler(value) {
+                if (value) {
+                    this.cardCvcDefault = value
+                    
+                } else {
+                    this.cardCvcDefault = '123';
+                }
+            }
         }
     },
     methods: {
         checkForm(event) {
             event.preventDefault()
-            console.log("clicou em submit");
-            console.log(event.target)
-          
+            console.log("submit!");
+      
+            if(this.cardNumber && this.cardName && this.expireDate && this.cardCvc) {
+                return true;
+            }
+            this.errors = [];
+
+            if(!this.cardNumber) this.errors.push("Card number is required")
+            if(!this.cardName) this.errors.push("Card name is required")
+            if(!this.expireDate) this.errors.push("Expire date is required")
+            if(!this.cardCvc) this.errors.push("CVC is required")
+
+            return 
         },
+        saveCard() {
+            localStorage.cardName = this.cardName;
+            localStorage.cardNumber = this.cardNumber;
+        },
+        updateValue(event) {
+            const value = event.target.value;
+            if(String(value).length <= 3) {
+                this.cardCvc = value
+            }
+            this.$forceUpdate()
+        }
     },
     filters: {
         capitalize: function(value) {
@@ -250,6 +336,9 @@ input[type=number] {
     background-color: #4caf50;
     border-radius: .5rem;
     cursor: pointer;
+    border: none;
+    padding: 1rem;
+    margin-top: .5rem;
 }
 .btn-submit:hover {
     background-color: #3f9242;
@@ -275,13 +364,6 @@ input[type=number] {
     box-shadow: 2px 2px 10px #ccc;
 }
 
-
-/* .card-front {
-    background: #ECE9E6;  
-    background: -webkit-linear-gradient(to right, #FFFFFF, #ECE9E6);  
-    background: linear-gradient(to right, #FFFFFF, #ECE9E6);
-} */
-
 .card-black {
     background: #000000;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to right, #434343, #000000);  /* Chrome 10-25, Safari 5.1-6 */
@@ -291,9 +373,10 @@ input[type=number] {
 
 .card-front, 
 .card-back {
-  /* position: absolute;
+   /* position: absolute;
   width: 100%;
-  height: 100%; */
+  height: 100%; 
+   */
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
@@ -302,6 +385,7 @@ input[type=number] {
   padding: 1rem;
   transform: rotateY(180deg);
   position: absolute;
+  left: 0;
 }
 
 .bg-dark {
@@ -313,5 +397,18 @@ input[type=number] {
 
 .text-small {
     font-size: .5rem;
+}
+
+@media (max-width: 500px) {
+    .card-block {
+        flex-direction: column;
+    }
+    .card {
+        max-width: 80vw;
+    }
+    form {
+        width: 80vw;
+        margin-top: 3rem;
+    }
 }
 </style>
