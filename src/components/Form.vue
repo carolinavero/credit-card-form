@@ -12,7 +12,9 @@
                     <div class="col-6 card-chip">
                         <img src="../assets/chip.png" alt="chip">
                     </div>
-                    <div class="col-6 card-logo mastercard"></div>
+                    <div class="col-6 card-logo"
+                        v-bind:class="[ mastercard ? 'mastercard' : 'visa' ]"
+                    ></div>
                 </div>
 
                 <div class="row">
@@ -78,6 +80,7 @@
                 placeholder="Type the card number"
                 v-model="cardNumber"
                 maxlength="20"
+                v-mask="cardNumberMask"
             >
         </p>
         
@@ -102,6 +105,7 @@
                     placeholder="MM/YY"
                     v-model="expireDate"
                     maxlength="5"
+                    v-mask="expireDateMask"
                     >
             </p>
 
@@ -133,19 +137,23 @@
 </template>
 
 <script>
+
 export default {
     name: 'Form',
     data() {
         return {
            cardNumber: '',
            cardNumberDefault: 'XXXX XXXX XXXX XXXX',
+           cardNumberMask: [/\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/], 
            expireDate: '',
            expireDateDefault: '01/22',
+           expireDateMask: [/\d/, /\d/, '/', /\d/, /\d/], 
            cardName: '',
            cardNameDefault: 'John Doe',
            cardCvc: '',
            cardCvcDefault: '123',
            flipped: false,
+           mastercard: false,
            errors: [],
         }
     },
@@ -158,8 +166,10 @@ export default {
             immediate: false,
             handler(value) {
                 if (value) {
-                    this.cardNumberDefault = value
-                    
+                    this.cardNumberDefault = value;
+                    if (value == 5) {
+                        this.mastercard = true;
+                    }
                 } else {
                     this.cardNumberDefault = 'XXXX XXXX XXXX XXXX';
                 }

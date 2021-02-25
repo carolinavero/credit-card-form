@@ -5,7 +5,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import Card from './components/Card'
+import VueMask from 'v-mask'
+
+Vue.use(VueMask)
 
 export default {
   name: 'App',

@@ -11,6 +11,7 @@
 <script>
 import Form from './Form'
 
+
 export default {
     name: 'Card',
     data: function() {
