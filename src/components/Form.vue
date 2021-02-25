@@ -4,7 +4,7 @@
 
       <div class="card-block__content">
 
-        <div class="card card-black"
+        <div class="card"
             v-bind:class="[ flipped ? 'card-flipped' : '' ]"
         >
             <div class="card-front">
@@ -24,7 +24,7 @@
 
                     <div class="card-name">
                         <div>
-                            <div>Cardholder's Name</div>
+                            <div class="text-card-label">Cardholder's Name</div>
                             {{ cardNameDefault | capitalize }}
                         </div>
                             
@@ -32,7 +32,7 @@
 
                     <div class="col-5">
                         <div class="card-date">
-                            <div>Valid thru</div>
+                            <div class="text-card-label">Valid thru</div>
                             {{ expireDateDefault }}
                         </div>
                     </div>
@@ -187,7 +187,7 @@ export default {
                 }
             }
         },
-        cardCvcDefault: {
+        cardCvc: {
             immediate: false,
             handler(value) {
                 if (value) {
@@ -242,7 +242,7 @@ export default {
 <style scoped>
 
 .ml-2 {
-    margin-left: 1rem;
+    margin-left: 2%;
 }
 .card-flipped {
   transform: rotateY(180deg);
@@ -259,7 +259,7 @@ export default {
     align-items: center;
 }
 .card-footer {
-    margin-top: 2rem;
+    margin: 2rem 0 1rem;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -279,7 +279,7 @@ form {
 }
 
 .col-6 {
-    width: 50%;
+    width: 49%;
     display: flex;
 }
 .col-12 {
@@ -347,7 +347,7 @@ input[type=number] {
 .card-block__content {
   background-color: transparent;
   width: 350px;
-  height: 250px;
+  height: auto;
   perspective: 1000px;
 }
 
@@ -355,7 +355,6 @@ input[type=number] {
     position: relative;
     width: 100%;
     height: 100%;
-    padding: 1rem;
     transition: transform 0.8s;
     transform-style: preserve-3d;
     border-radius: 2rem;
@@ -364,30 +363,43 @@ input[type=number] {
     box-shadow: 2px 2px 10px #ccc;
 }
 
-.card-black {
-    background: #000000;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #434343, #000000);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: #fff;
-}
-
 .card-front, 
 .card-back {
-   /* position: absolute;
-  width: 100%;
-  height: 100%; 
-   */
+   background-color: black;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
-.card-back {
-  padding: 1rem;
-  transform: rotateY(180deg);
-  position: absolute;
-  left: 0;
+.card-front {
+    padding: 1rem;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #000000;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #434343, #000000);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: #fff;
+    border-radius: 2rem;
 }
 
+.card-back {
+    padding: 1rem;
+    transform: rotateY(180deg);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #000000;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #434343, #000000);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: #fff;
+    border-radius: 2rem;
+}
+.card-cvc {
+    margin-top: 1rem;
+}
 .bg-dark {
     height: 30px;
     width: 100%;
@@ -399,9 +411,16 @@ input[type=number] {
     font-size: .5rem;
 }
 
+.text-card-label {
+    font-size: .85rem;
+}
+
 @media (max-width: 500px) {
     .card-block {
         flex-direction: column;
+    }
+    .card-block__content {
+        width: 100%;
     }
     .card {
         max-width: 80vw;

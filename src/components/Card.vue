@@ -43,4 +43,16 @@ export default {
     margin-top: 2rem;
 }
 
+@media(max-width: 500px) {
+    .card {
+        padding: 2rem;
+        margin-top: 1rem;
+        width: 80vw;
+    }
+    h1 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+}
+
 </style>
