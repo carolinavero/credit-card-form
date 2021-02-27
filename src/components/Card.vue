@@ -37,23 +37,11 @@ export default {
     align-items: center;
     justify-content: center;
 }
+
 .card {
     background-color: #f7f7f7;
-    padding: 3rem;
-    width: 70vw;
-    margin-top: 2rem;
-}
-
-@media(max-width: 500px) {
-    .card {
-        padding: 2rem;
-        margin-top: 1rem;
-        width: 80vw;
-    }
-    h1 {
-        font-size: 1.5rem;
-        text-align: center;
-    }
+    width: 100%;
+    margin-top: 1rem;
 }
 
 </style>

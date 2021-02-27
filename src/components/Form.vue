@@ -14,6 +14,7 @@
                         <img src="../assets/chip.png" alt="chip">
                     </div>
                     <div class="col-6 card-logo"
+                        data-cy="card-logo"
                         v-bind:class="[ mastercard ? 'mastercard' : 'visa' ]"
                     ></div>
                 </div>
@@ -65,7 +66,7 @@
         method="post"
       >
 
-        <p v-if="errors.length">
+        <p data-cy="errors-list" v-if="errors.length">
             <b>Please correct the following error(s):</b>
             <ul>
                 <li v-for="(error, index) in errors" :key="index"> {{ error }} </li>
@@ -131,7 +132,7 @@
         </div>
         
         <p>
-            <input type="submit" value="Save Card" class="btn-submit" >
+            <input type="submit" value="Save Card" data-cy="submit" class="btn-submit" >
         </p>
         
 
@@ -435,6 +436,9 @@ input[type=number] {
         flex-direction: column;
     }
     .card-block__content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 100%;
     }
     .card {
@@ -445,4 +449,5 @@ input[type=number] {
         margin-top: 3rem;
     }
 }
+
 </style>
