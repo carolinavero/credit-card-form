@@ -42,6 +42,10 @@ export default {
     background-color: #f7f7f7;
     width: 100%;
     margin-top: 1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 </style>

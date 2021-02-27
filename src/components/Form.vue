@@ -292,6 +292,7 @@ form {
     align-items: center;
     justify-content: center;
     width: 30vw;
+    margin-left: 50px;
 }
 
 .col-6 {
@@ -447,6 +448,7 @@ input[type=number] {
     form {
         width: 80vw;
         margin-top: 3rem;
+        margin-left: 0;
     }
 }
 
