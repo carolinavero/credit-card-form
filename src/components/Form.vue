@@ -5,6 +5,7 @@
       <div class="card-block__content">
 
         <div class="card"
+            data-cy="credit-card"
             v-bind:class="[ flipped ? 'card-flipped' : '' ]"
         >
             <div class="card-front">
@@ -76,6 +77,7 @@
             <input 
                 id="card-number" 
                 type="text" 
+                data-cy="card-number"
                 name="card-number" 
                 placeholder="Type the card number"
                 v-model="cardNumber"
@@ -90,6 +92,7 @@
                 id="card-name" 
                 type="text" 
                 name="card-name" 
+                data-cy="card-name"
                 placeholder="Type the name"
                 v-model="cardName"
             >
@@ -102,6 +105,7 @@
                     id="expire-date" 
                     type="text" 
                     name="expire-date" 
+                    data-cy="expire-date" 
                     placeholder="MM/YY"
                     v-model="expireDate"
                     maxlength="5"
@@ -115,6 +119,7 @@
                     id="card-cvc" 
                     type="number" 
                     name="card-cvc"
+                    data-cy="card-cvc"
                     placeholder="XXX" 
                     @input="updateValue"
                     :value="cardCvc"
