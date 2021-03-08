@@ -42,6 +42,7 @@ export default {
     background-color: #f7f7f7;
     width: 100%;
     margin-top: 1rem;
+    padding: 3rem 0;
 
     display: flex;
     align-items: center;

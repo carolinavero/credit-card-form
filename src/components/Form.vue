@@ -266,6 +266,7 @@ export default {
 
 .card-block {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: space-around;
 }
@@ -291,8 +292,8 @@ form {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 30vw;
-    margin-left: 50px;
+    width: 100%;
+    margin-top: 2rem;
 }
 
 .col-6 {
