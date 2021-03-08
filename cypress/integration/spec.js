@@ -63,9 +63,7 @@ describe('Card Form page', () => {
         cy.get('[data-cy=card-cvc]')
             .type(myCard.cardCvc)
             .should('have.value', myCard.cardCvc)
-
-            
-        })
+    })
         
     it('check if the card is flipping', () => {
         cy.get('[data-cy=card-cvc').first().focus().then(() => {
