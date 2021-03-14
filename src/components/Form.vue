@@ -37,7 +37,7 @@
                     <div class="col-5">
                         <div class="card-date">
                             <div class="text-card-label">Valid thru</div>
-                            {{ expireDateDefault }}
+                            {{ expiryDateDefault }}
                         </div>
                     </div>
                 </div>
@@ -84,6 +84,7 @@
                 v-model="cardNumber"
                 maxlength="20"
                 v-mask="cardNumberMask"
+                v-bind:class="[ hasError ? 'error' : '' ]"
             >
         </p>
         
@@ -96,21 +97,23 @@
                 data-cy="card-name"
                 placeholder="Type the name"
                 v-model="cardName"
+                v-bind:class="[ hasError ? 'error' : '' ]"
             >
         </p>
 
         <div class="row">
             <p class="col-6">
-                <label for="expire-date">Expire Date</label>
+                <label for="expiry-date">Expiry Date</label>
                 <input 
-                    id="expire-date" 
+                    id="expiry-date" 
                     type="text" 
-                    name="expire-date" 
-                    data-cy="expire-date" 
+                    name="expiry-date" 
+                    data-cy="expiry-date" 
                     placeholder="MM/YY"
-                    v-model="expireDate"
+                    v-model="expiryDate"
                     maxlength="5"
-                    v-mask="expireDateMask"
+                    v-mask="expiryDateMask"
+                    v-bind:class="[ hasError ? 'error' : '' ]"
                     >
             </p>
 
@@ -126,6 +129,7 @@
                     :value="cardCvc"
                     @focus="flipped = true"
                     @blur="flipped  = false"
+                    v-bind:class="[ hasError ? 'error' : '' ]"
                 >
             </p>
 
@@ -151,9 +155,9 @@ export default {
            cardNumber: '',
            cardNumberDefault: 'XXXX XXXX XXXX XXXX',
            cardNumberMask: [/\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/], 
-           expireDate: '',
-           expireDateDefault: '01/22',
-           expireDateMask: [/\d/, /\d/, '/', /\d/, /\d/], 
+           expiryDate: '',
+           expiryDateDefault: '01/22',
+           expiryDateMask: [/\d/, /\d/, '/', /\d/, /\d/], 
            cardName: '',
            cardNameDefault: 'John Doe',
            cardCvc: '',
@@ -161,6 +165,7 @@ export default {
            flipped: false,
            mastercard: false,
            errors: [],
+           hasError: false
         }
     },
     mounted() {
@@ -192,14 +197,14 @@ export default {
                 }
             }
         },
-        expireDate: {
+        expiryDate: {
             immediate: false,
             handler(value) {
                 if (value) {
-                    this.expireDateDefault = value
+                    this.expiryDateDefault = value
                     
                 } else {
-                    this.expireDateDefault = '01/21';
+                    this.expiryDateDefault = '01/21';
                 }
             }
         },
@@ -219,18 +224,29 @@ export default {
         checkForm(event) {
             event.preventDefault()
             console.log("submit!");
-      
-            if(this.cardNumber && this.cardName && this.expireDate && this.cardCvc) {
-                return true;
-            }
+
             this.errors = [];
 
             if(!this.cardNumber) this.errors.push("Card number is required")
             if(!this.cardName) this.errors.push("Card name is required")
-            if(!this.expireDate) this.errors.push("Expire date is required")
-            if(!this.cardCvc) this.errors.push("CVC is required")
 
+            if(!this.expiryDate) { 
+                this.errors.push("Expiry date is required")
+            } else if(!this.validExpiryDate(this.expiryDate)) {
+                this.errors.push("Expiry date is not valid!");
+                this.hasError = true
+                
+            }
+
+            if(!this.cardCvc) {
+                this.errors.push("CVC is required")
+                this.hasError = true
+            }
             return 
+        },
+        validExpiryDate(checkDate) {
+            let re = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/
+            return re.test(checkDate)
         },
         saveCard() {
             localStorage.cardName = this.cardName;
@@ -332,7 +348,7 @@ p {
 }
 
 input {
-    border: none;
+    border: 1px solid transparent;
     padding: 1rem;
     margin-top: .5rem;
 }
@@ -345,6 +361,10 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.error {
+    border-color: red;
 }
 
 .btn-submit {

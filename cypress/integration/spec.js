@@ -44,7 +44,7 @@ describe('Card Form page', () => {
         const myCard = {
             cardNumber: '4141 4141 4141 4141',
             cardName: 'John Doe',
-            expireDate: '12/21',
+            expiryDate: '12/21',
             cardCvc: '123'
         }
 
@@ -56,9 +56,9 @@ describe('Card Form page', () => {
             .type(myCard.cardName)
             .should('have.value', myCard.cardName)
 
-        cy.get('[data-cy=expire-date]')
-            .type(myCard.expireDate)
-            .should('have.value', myCard.expireDate)
+        cy.get('[data-cy=expiry-date]')
+            .type(myCard.expiryDate)
+            .should('have.value', myCard.expiryDate)
 
         cy.get('[data-cy=card-cvc]')
             .type(myCard.cardCvc)
