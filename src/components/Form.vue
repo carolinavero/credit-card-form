@@ -6,7 +6,7 @@
 
         <div class="card"
             data-cy="credit-card"
-            v-bind:class="[ flipped ? 'card-flipped' : '' ]"
+            v-bind:class="{ 'card-flipped': flipped }"
         >
             <div class="card-front">
                 <div class="row card-header">
@@ -66,12 +66,12 @@
         method="post"
       >
 
-        <p data-cy="errors-list" v-if="errors.length">
-            <b>Please correct the following error(s):</b>
-            <ul>
+        <blockquote class="errors-list" data-cy="errors-list" v-if="errors.length">
+            <b class="note-title">Please correct the following error(s):</b>
+            <!-- <ul>
                 <li v-for="(error, index) in errors" :key="index"> {{ error }} </li>
-            </ul>
-        </p>
+            </ul> -->
+        </blockquote>
 
         <p>
             <label for="card-number">Card Number</label>
@@ -84,8 +84,9 @@
                 v-model="cardNumber"
                 maxlength="20"
                 v-mask="cardNumberMask"
-                v-bind:class="[ hasError ? 'error' : '' ]"
+                v-bind:class="{ error: hasError }"
             >
+            <small class="text-error">{{ cardNumberError }}</small>
         </p>
         
         <p>
@@ -97,8 +98,9 @@
                 data-cy="card-name"
                 placeholder="Type the name"
                 v-model="cardName"
-                v-bind:class="[ hasError ? 'error' : '' ]"
+                v-bind:class="{ error: hasError }"
             >
+            <small class="text-error">{{ cardNameError }}</small>
         </p>
 
         <div class="row">
@@ -113,8 +115,9 @@
                     v-model="expiryDate"
                     maxlength="5"
                     v-mask="expiryDateMask"
-                    v-bind:class="[ hasError ? 'error' : '' ]"
+                    v-bind:class="{ error: hasError }"
                     >
+                <small class="text-error">{{ expiryDateError }}</small>
             </p>
 
             <p class="col-6 ml-2">
@@ -129,9 +132,11 @@
                     :value="cardCvc"
                     @focus="flipped = true"
                     @blur="flipped  = false"
-                    v-bind:class="[ hasError ? 'error' : '' ]"
+                    v-bind:class="{ error: hasError }"
                 >
+                <small class="text-error">{{ cardCvcError }}</small>
             </p>
+          
 
         </div>
         
@@ -155,13 +160,17 @@ export default {
            cardNumber: '',
            cardNumberDefault: 'XXXX XXXX XXXX XXXX',
            cardNumberMask: [/\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/], 
+           cardNumberError: '',
            expiryDate: '',
            expiryDateDefault: '01/22',
            expiryDateMask: [/\d/, /\d/, '/', /\d/, /\d/], 
+           expiryDateError: '',
            cardName: '',
            cardNameDefault: 'John Doe',
+           cardNameError: '',
            cardCvc: '',
            cardCvcDefault: '123',
+           cardCvcError: '',
            flipped: false,
            mastercard: false,
            errors: [],
@@ -178,20 +187,23 @@ export default {
             handler(value) {
                 if (value) {
                     this.cardNumberDefault = value;
+                    this.cardNumberError = '';
+
                     if (value == 5) {
                         this.mastercard = true;
                     }
                 } else {
                     this.cardNumberDefault = 'XXXX XXXX XXXX XXXX';
                 }
+            
             }
         },
         cardName: {
             immediate: false,
             handler(value) {
                 if (value) {
-                    this.cardNameDefault = value
-                    
+                    this.cardNameDefault = value;
+                    this.cardNameError = '';
                 } else {
                     this.cardNameDefault = 'John Doe';
                 }
@@ -201,7 +213,8 @@ export default {
             immediate: false,
             handler(value) {
                 if (value) {
-                    this.expiryDateDefault = value
+                    this.expiryDateDefault = value;
+                    this.expiryDateError = '';
                     
                 } else {
                     this.expiryDateDefault = '01/21';
@@ -213,6 +226,7 @@ export default {
             handler(value) {
                 if (value) {
                     this.cardCvcDefault = value
+                    this.cardCvcError = ''
                     
                 } else {
                     this.cardCvcDefault = '123';
@@ -227,23 +241,36 @@ export default {
 
             this.errors = [];
 
-            if(!this.cardNumber) this.errors.push("Card number is required")
-            if(!this.cardName) this.errors.push("Card name is required")
+            if(!this.cardNumber) {
+                let errorMsg = "Card number is required";
+                this.errors.push(errorMsg);
+                this.cardNumberError = errorMsg;
+
+            } 
+            if(!this.cardName) {
+                let errorMsg = "Card name is required";
+                this.errors.push(errorMsg);
+                this.cardNameError = errorMsg;
+            }
 
             if(!this.expiryDate) { 
                 this.errors.push("Expiry date is required")
+                this.expiryDateError = "Expiry date is required";
             } else if(!this.validExpiryDate(this.expiryDate)) {
                 this.errors.push("Expiry date is not valid!");
-                this.hasError = true
-                
+                this.expiryDateError = "Expiry date is not valid!";
+
             }
 
             if(!this.cardCvc) {
-                this.errors.push("CVC is required")
-                this.hasError = true
+                let errorMsg = "CVC is required";
+                this.errors.push(errorMsg);
+                this.cardCvcError = errorMsg;
+                
             }
             return 
         },
+
         validExpiryDate(checkDate) {
             let re = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/
             return re.test(checkDate)
@@ -348,7 +375,7 @@ p {
 }
 
 input {
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     padding: 1rem;
     margin-top: .5rem;
 }
@@ -362,9 +389,19 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
-
+.errors-list {
+    border-left: 5px solid #d9534f;
+    background-color: #fff2f2;
+    padding: 1rem;
+}
+.errors-list .note-title {
+    color: #d9534f;
+}
+.text-error {
+    color: #d9534f;
+}
 .error {
-    border-color: red;
+    border-color: #d9534f;
 }
 
 .btn-submit {
