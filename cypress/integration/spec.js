@@ -74,6 +74,10 @@ describe('Card Form page', () => {
     it('checks if errors is shown when an input is empty', () => {
         cy.get('[data-cy=submit]').click()
         cy.get('[data-cy=errors-list]').should('have.css', 'display', 'flex')
+        cy.get('[data-cy="card-number-error"]').should('contain', "Card number is required")
+        cy.get('[data-cy="card-name-error"]').should('contain', "Card name is required")
+        cy.get('[data-cy="expiry-date-error"]').should('contain', "Expiry date is required")
+        cy.get('[data-cy="card-cvc-error"]').should('contain', "CVC is required")
     })
 
     it('changes the card logo if it`s a mastercard number', () => {

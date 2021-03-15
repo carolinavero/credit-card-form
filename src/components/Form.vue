@@ -86,7 +86,7 @@
                 v-mask="cardNumberMask"
                 v-bind:class="{ error: hasError }"
             >
-            <small class="text-error">{{ cardNumberError }}</small>
+            <small data-cy="card-number-error" class="text-error">{{ cardNumberError }}</small>
         </p>
         
         <p>
@@ -100,7 +100,7 @@
                 v-model="cardName"
                 v-bind:class="{ error: hasError }"
             >
-            <small class="text-error">{{ cardNameError }}</small>
+            <small data-cy="card-name-error" class="text-error">{{ cardNameError }}</small>
         </p>
 
         <div class="row">
@@ -117,7 +117,7 @@
                     v-mask="expiryDateMask"
                     v-bind:class="{ error: hasError }"
                     >
-                <small class="text-error">{{ expiryDateError }}</small>
+                <small data-cy="expiry-date-error" class="text-error">{{ expiryDateError }}</small>
             </p>
 
             <p class="col-6 ml-2">
@@ -134,7 +134,7 @@
                     @blur="flipped  = false"
                     v-bind:class="{ error: hasError }"
                 >
-                <small class="text-error">{{ cardCvcError }}</small>
+                <small data-cy="card-cvc-error" class="text-error">{{ cardCvcError }}</small>
             </p>
           
 
@@ -259,7 +259,6 @@ export default {
             } else if(!this.validExpiryDate(this.expiryDate)) {
                 this.errors.push("Expiry date is not valid!");
                 this.expiryDateError = "Expiry date is not valid!";
-
             }
 
             if(!this.cardCvc) {
@@ -393,6 +392,7 @@ input[type=number] {
     border-left: 5px solid #d9534f;
     background-color: #fff2f2;
     padding: 1rem;
+    display: flex;
 }
 .errors-list .note-title {
     color: #d9534f;
